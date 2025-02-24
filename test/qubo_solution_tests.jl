@@ -5,7 +5,7 @@ using Test
 
 Random.seed!(42)
 
-n_variables = 2
+n_variables = 3
 n_qubits = 12
 range = 3.0
 
@@ -13,7 +13,7 @@ A = rand(n_variables, n_variables)
 b = rand(n_variables)
 exact_solution = A \ b
 
-@test isapprox(A * solution, b)
+@test isapprox(A * exact_solution, b)
 
 encoding = QuboLS.ranged_efficient_encoding(
   n_variables=n_variables, n_qubits=n_qubits, range=range
