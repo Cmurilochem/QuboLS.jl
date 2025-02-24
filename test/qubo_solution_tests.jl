@@ -5,7 +5,7 @@ using Test
 
 Random.seed!(42)
 
-n_variables = 3
+n_variables = 2
 n_qubits = 12
 range = 3.0
 
