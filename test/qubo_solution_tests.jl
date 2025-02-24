@@ -1,9 +1,9 @@
 using QuboLS
-using Random
 using JuMP, QUBO, ToQUBO
 using Test
 
-Random.seed!(42)
+#using Random
+#Random.seed!(42)
 
 n_variables = 2
 n_qubits = 12

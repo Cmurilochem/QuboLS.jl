@@ -30,8 +30,8 @@ function get_qubo_matrix!(q::QUBO)
 
   s = Symbolics.variables(:s, 1:n_variables, 1:n_qubits)
 
-  for (i, j) in IterTools.product(1:n_variables, 1:n_qubits)
-    for (k, l) in IterTools.product(1:n_variables, 1:n_qubits)
+  for (i, j) in Iterators.product(1:n_variables, 1:n_qubits)
+    for (k, l) in Iterators.product(1:n_variables, 1:n_qubits)
       n = (i - 1) * n_qubits + j
       m = (k - 1) * n_qubits + l
       term = s[i, j] * s[k, l]
