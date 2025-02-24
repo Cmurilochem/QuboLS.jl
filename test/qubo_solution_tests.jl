@@ -1,6 +1,6 @@
 using QuboLS
 using Random
-using JuMP, QUBO
+using JuMP, QUBO, ToQUBO
 using Test
 
 Random.seed!(42)
