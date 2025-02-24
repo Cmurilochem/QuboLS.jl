@@ -43,17 +43,17 @@ function get_qubo_cost_function!(p::EncodedLinearProblem)
     cost_p1 = (p.encoded_solution' * p.matrix' * p.matrix * p.encoded_solution)
     cost_p1 = Symbolics.simplify(cost_p1, expand=true)
   end
- 
+
   begin
-    cost_p2 = - 2.0 * (p.rhs'p.matrix * p.encoded_solution)
+    cost_p2 = -2.0 * (p.rhs' * p.matrix * p.encoded_solution)
     cost_p2 = Symbolics.simplify(cost_p2, expand=true)
     s = Symbolics.variables(:s, 1:n_variables, 1:n_qubits)
     dict = Dict((s[i, j] => s[i, j]^2) for i in 1:n_variables for j in 1:n_qubits)
     cost_p2 = Symbolics.substitute(cost_p2, dict)
-  end 
+  end
 
   cost_p3 = p.rhs' * p.rhs
-  qubo_cost_function = cost_p1 + cost_p2 + cost_p3 
+  qubo_cost_function = cost_p1 + cost_p2 + cost_p3
 
   p.qubo_cost_function = Symbolics.simplify(qubo_cost_function, expand=true)
 end

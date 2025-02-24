@@ -1,6 +1,6 @@
-using QuboLS
-using Random
-using JuMP, QUBO, ToQUBO
+import QuboLS as QLS
+import Random
+import JuMP, QUBO, ToQUBO, QUBODrivers
 using Test
 
 Random.seed!(42)
@@ -29,19 +29,22 @@ for params in test_cases
     @test isapprox(A * exact_solution, b)
 
     # Encode problem using QUBO
-    encoding = QuboLS.ranged_efficient_encoding(
+    encoding = QLS.ranged_efficient_encoding(
       n_variables=n_variables, n_qubits=n_qubits, range=range
     )
-    QuboLS.calculate_polynom!(encoding)
+    QLS.calculate_polynom!(encoding)
 
-    lp = QuboLS.encoded_linear_problem(A, b, encoding)
-    QuboLS.get_qubo_cost_function!(lp)
+    lp = QLS.encoded_linear_problem(A, b, encoding)
+    QLS.get_qubo_cost_function!(lp)
 
-    qubo = QuboLS.QUBO(lp)
-    QuboLS.get_qubo_matrix!(qubo)
+    qubo = QLS.QUBO(lp)
+    QLS.get_qubo_matrix!(qubo)
 
     # Solve QUBO using JuMP and QUBO.jl
-    model = JuMP.Model(() -> ToQUBO.Optimizer(ExactSampler.Optimizer))
+    sampler = QUBODrivers.ExactSampler.Optimizer
+    optimizer = ToQUBO.Optimizer(sampler)
+
+    model = JuMP.Model(() -> optimizer)
     JuMP.@variable(model, s[1:n_variables*n_qubits], Bin)
     JuMP.@objective(model, Min, s' * qubo.matrix * s + qubo.offset)
 
@@ -50,7 +53,7 @@ for params in test_cases
     # Retrieve solution
     qubo_binary_solution = Int.(JuMP.value.(s))
     qubo_energy = JuMP.objective_value(model)
-    my_cost, approx_solution = QuboLS.eval_qubo_cost_function(lp, qubo_binary_solution)
+    my_cost, approx_solution = QLS.eval_qubo_cost_function(lp, qubo_binary_solution)
 
     # Validate QUBO solution
     @test isapprox(qubo_energy, my_cost)
