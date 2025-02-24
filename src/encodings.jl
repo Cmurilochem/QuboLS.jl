@@ -6,7 +6,12 @@ mutable struct RangedEfficientEncoding{A,B,C,D,E} <: AbstractEncoding
   polynom::E
 end
 
-function ranged_efficient_encoding(; n_variables::Int=1, n_qubits::Int=2, range::Float64=1.0, var_base_name::Symbol=:s)
+function ranged_efficient_encoding(;
+  n_variables::Int=1,
+  n_qubits::Int=2,
+  range::Union{Vector{Float64},Float64}=1.0,
+  var_base_name::Symbol=:s
+)
   if !isa(range, Vector)
     range = fill(range, n_qubits)
   end
