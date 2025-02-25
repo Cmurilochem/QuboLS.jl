@@ -10,6 +10,7 @@ test_cases = [
   (n_variables=2, n_qubits=6, range=2.0),
   (n_variables=3, n_qubits=6, range=10.0),
   (n_variables=4, n_qubits=6, range=7.0),
+  #(n_variables=5, n_qubits=4, range=9.5),
 ]
 
 for params in test_cases
@@ -38,9 +39,9 @@ for params in test_cases
     QLS.get_qubo_cost_function!(lp)
 
     qubo = QLS.QUBO(lp)
-    QLS.get_qubo_matrix!(qubo)
+    QLS.get_qubo_matrix!(qubo, check_matrix=true)
 
-    # Solve QUBO using JuMP and QUBO.jl
+    # Solve using QUBO.jl
     sampler = QUBODrivers.ExactSampler.Optimizer
     optimizer = ToQUBO.Optimizer(sampler)
 

@@ -17,7 +17,7 @@ lp = QLS.encoded_linear_problem(A, b, qubit_encoding)
 QLS.get_qubo_cost_function!(lp)
 
 qubo = QLS.QUBO(lp)
-QLS.get_qubo_matrix!(qubo)
+QLS.get_qubo_matrix!(qubo, check_matrix=true)
 
 @test qubo.offset == 260.0
 @test LinearAlgebra.istriu(qubo.matrix)
