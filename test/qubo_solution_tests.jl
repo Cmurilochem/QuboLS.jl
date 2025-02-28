@@ -3,17 +3,20 @@ import Random
 import JuMP, QUBO, ToQUBO, QUBODrivers
 using Test
 
-Random.seed!(42)
-
 # Define different parameter sets to test
 test_cases = [
   (n_variables=2, n_qubits=6, range=2.0),
   (n_variables=3, n_qubits=6, range=10.0),
   (n_variables=4, n_qubits=6, range=7.0),
-  #(n_variables=5, n_qubits=4, range=9.5),
 ]
 
-for params in test_cases
+# Define how many times each test case should be repeated
+n_repeats = 1
+
+for _ in 1:n_repeats, params in test_cases
+
+  Random.seed!(42)
+
   @testset "Testing with n_variables=$(params.n_variables), n_qubits=$(params.n_qubits), range=$(params.range)" begin
 
     # Extract parameters
@@ -61,3 +64,4 @@ for params in test_cases
     @test isapprox(approx_solution, exact_solution; atol=1)
   end
 end
+
