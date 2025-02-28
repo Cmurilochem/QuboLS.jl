@@ -20,10 +20,7 @@ function ranged_efficient_encoding(;
 end
 
 function calculate_polynom!(encoding::RangedEfficientEncoding)
-  n_variables = encoding.n_variables
-  n_qubits = encoding.n_qubits
-  range = encoding.range
-  var_base_name = encoding.var_base_name
+  (; n_variables, n_qubits, range, var_base_name) = encoding
 
   int_max = 2^n_qubits - 1
 
@@ -34,9 +31,7 @@ function calculate_polynom!(encoding::RangedEfficientEncoding)
   coeffs = Vector{Float64}(undef, n_qubits)
 
   coeffs[1] = -2^(n_qubits - 1) * max_absval[1]
-  for i in 2:n_qubits
-    coeffs[i] = 2^i * max_absval[i]
-  end
+  coeffs[2:end] = 2 .^ (2:n_qubits) .* max_absval[2:end]
 
   encoding.polynom = var_set * coeffs
 end
