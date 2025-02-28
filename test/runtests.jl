@@ -13,4 +13,7 @@ end
 @testset "qubo solution" begin
   include("qubo_solution_tests.jl")
 end
+@testset "qubo interface" begin
+  include("interfaces_test.jl")
+end
 end

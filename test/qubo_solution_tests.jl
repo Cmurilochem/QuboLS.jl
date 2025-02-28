@@ -1,6 +1,6 @@
 import QuboLS as QLS
 import Random
-import JuMP, QUBO, ToQUBO, QUBODrivers
+import JuMP, QUBO
 using Test
 
 # Define different parameter sets to test
@@ -45,10 +45,8 @@ for _ in 1:n_repeats, params in test_cases
     QLS.get_qubo_matrix!(qubo, check_matrix=true)
 
     # Solve using QUBO.jl
-    sampler = QUBODrivers.ExactSampler.Optimizer
-    optimizer = ToQUBO.Optimizer(sampler)
-
-    model = JuMP.Model(() -> optimizer)
+    optimizer = QUBO.ExactSampler.Optimizer
+    model = JuMP.Model(optimizer)
     JuMP.@variable(model, s[1:n_variables*n_qubits], Bin)
     JuMP.@objective(model, Min, s' * qubo.matrix * s + qubo.offset)
 
